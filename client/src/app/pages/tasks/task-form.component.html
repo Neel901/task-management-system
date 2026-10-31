@@ -1,0 +1,82 @@
+<div class="page-header">
+  <div>
+    <a routerLink="/tasks" class="back">← Back to tasks</a>
+    <h1>
+      @if (isEdit) {
+        Edit {{ task()?.taskNumber }}
+      } @else {
+        New task
+      }
+    </h1>
+  </div>
+</div>
+
+<form class="card form-card" [formGroup]="form" (ngSubmit)="submit()">
+  @if (error()) {
+    <div class="alert">{{ error() }}</div>
+  }
+
+  @if (statusOnly()) {
+    <div class="note">This task was assigned to you by a manager, so you can only change its status.</div>
+  }
+
+  <label>
+    Title *
+    <input type="text" formControlName="title" placeholder="What needs to be done?" />
+    @if (form.controls.title.touched && form.controls.title.invalid) {
+      <small class="field-error">Title must be 3–200 characters</small>
+    }
+  </label>
+
+  <label>
+    Description
+    <textarea formControlName="description" rows="4" placeholder="Add some details (optional)"></textarea>
+  </label>
+
+  <div class="grid-2">
+    <label>
+      Status
+      <select formControlName="status">
+        @for (s of statuses(); track s) {
+          <option [value]="s">{{ s | label }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Priority
+      <select formControlName="priority">
+        @for (p of priorities(); track p) {
+          <option [value]="p">{{ p | label }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Due date
+      <input type="date" formControlName="dueDate" [min]="today" />
+    </label>
+
+    @if (auth.isManager()) {
+      <label>
+        Assign to *
+        <select formControlName="assignedTo">
+          <option value="" disabled>Select an employee</option>
+          @for (e of employees(); track e._id) {
+            <option [value]="e._id">{{ e.name }} ({{ e.employeeCode }})</option>
+          }
+        </select>
+        @if (form.controls.assignedTo.touched && form.controls.assignedTo.invalid) {
+          <small class="field-error">Choose who will do this task</small>
+        }
+      </label>
+    }
+  </div>
+
+  <div class="form-actions">
+    <a class="btn btn-ghost" routerLink="/tasks">Cancel</a>
+    <button class="btn btn-primary" type="submit" [disabled]="saving()">
+      {{ saving() ? 'Saving…' : isEdit ? 'Save changes' : 'Create task' }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,23 @@
+@if (auth.user(); as user) {
+  <header class="topbar">
+    <a routerLink="/dashboard" class="brand"><span class="brand-mark">✓</span> TaskFlow</a>
+
+    <nav class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
+      @if (auth.isManager()) {
+        <a routerLink="/team" routerLinkActive="active">Team</a>
+      }
+    </nav>
+
+    <div class="user">
+      <span class="user-name">{{ user.name }}</span>
+      <span class="pill">{{ user.role }}</span>
+      <button class="btn btn-ghost" (click)="auth.logout()">Log out</button>
+    </div>
+  </header>
+}
+
+<main class="container">
+  <router-outlet />
+</main>

@@ -1,0 +1,60 @@
+<div class="page-header">
+  <div>
+    <h1>Hi, {{ auth.user()?.name }}</h1>
+    <p class="muted">
+      {{ auth.isManager() ? 'Overview of all tasks in your team' : 'Overview of the tasks assigned to you' }}
+    </p>
+  </div>
+  <a class="btn btn-primary" routerLink="/tasks/new">+ New task</a>
+</div>
+
+@if (error()) {
+  <div class="alert">{{ error() }}</div>
+}
+
+<section class="stats">
+  @for (card of cards; track card.key) {
+    <a [class]="'card stat tone-' + card.tone" routerLink="/tasks" [queryParams]="card.query">
+      <span class="stat-label">{{ card.label }}</span>
+      <span class="stat-value">
+        @if (stats(); as s) { {{ s[card.key] }} } @else { – }
+      </span>
+    </a>
+  }
+</section>
+
+<section class="card">
+  <div class="card-header">
+    <h2>Recently updated</h2>
+    <a routerLink="/tasks">View all →</a>
+  </div>
+
+  @if (recent().length === 0) {
+    <p class="empty">No tasks yet.</p>
+  } @else {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Priority</th>
+          @if (auth.isManager()) { <th>Assignee</th> }
+          <th>Due</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (task of recent(); track task._id) {
+          <tr>
+            <td class="mono">{{ task.taskNumber }}</td>
+            <td>{{ task.title }}</td>
+            <td><span [class]="'badge s-' + task.status">{{ task.status | label }}</span></td>
+            <td><span [class]="'badge p-' + task.priority">{{ task.priority | label }}</span></td>
+            @if (auth.isManager()) { <td>{{ task.assignedTo.name }}</td> }
+            <td>{{ task.dueDate ? (task.dueDate | date: 'mediumDate' : 'UTC') : '—' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

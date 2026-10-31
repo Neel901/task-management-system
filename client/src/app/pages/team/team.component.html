@@ -1,0 +1,32 @@
+<div class="page-header">
+  <div>
+    <h1>Team</h1>
+    <p class="muted">Employees and how far along they are</p>
+  </div>
+</div>
+
+@if (error()) {
+  <div class="alert">{{ error() }}</div>
+}
+
+<section class="team-grid">
+  @for (e of employees(); track e._id) {
+    <article class="card member">
+      <div class="avatar">{{ e.name.charAt(0) }}</div>
+      <div class="member-info">
+        <strong>{{ e.name }}</strong>
+        <span class="muted">{{ e.employeeCode }} · {{ e.email }}</span>
+      </div>
+
+      <div class="progress" [attr.aria-label]="percent(e) + '% complete'">
+        <div class="progress-bar" [style.width.%]="percent(e)"></div>
+      </div>
+      <div class="member-footer">
+        <span class="muted">{{ e.completedTasks }} of {{ e.totalTasks }} done</span>
+        <a [routerLink]="['/tasks']" [queryParams]="{ assignedTo: e._id }">View tasks →</a>
+      </div>
+    </article>
+  } @empty {
+    <p class="empty">No employees yet.</p>
+  }
+</section>

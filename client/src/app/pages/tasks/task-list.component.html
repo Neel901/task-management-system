@@ -1,0 +1,112 @@
+<div class="page-header">
+  <div>
+    <h1>Tasks</h1>
+    <p class="muted">{{ auth.isManager() ? 'All tasks in your team' : 'Tasks assigned to you' }}</p>
+  </div>
+  <a class="btn btn-primary" routerLink="/tasks/new">+ New task</a>
+</div>
+
+<section class="card filters">
+  <input
+    type="search"
+    placeholder="Search title or TMS-number…"
+    [(ngModel)]="filters.search"
+    (ngModelChange)="onSearch()"
+  />
+
+  <select [(ngModel)]="filters.status" (ngModelChange)="applyFilters()">
+    <option value="">All statuses</option>
+    <option value="active">Active (next + in progress)</option>
+    <option value="overdue">Overdue</option>
+    @for (s of statuses(); track s) {
+      <option [value]="s">{{ s | label }}</option>
+    }
+  </select>
+
+  <select [(ngModel)]="filters.priority" (ngModelChange)="applyFilters()">
+    <option value="">All priorities</option>
+    @for (p of priorities(); track p) {
+      <option [value]="p">{{ p | label }}</option>
+    }
+  </select>
+
+  @if (auth.isManager()) {
+    <select [(ngModel)]="filters.assignedTo" (ngModelChange)="applyFilters()">
+      <option value="">All employees</option>
+      @for (e of employees(); track e._id) {
+        <option [value]="e._id">{{ e.name }}</option>
+      }
+    </select>
+  }
+
+  <button class="btn btn-ghost" (click)="clearFilters()">Clear</button>
+</section>
+
+@if (error()) {
+  <div class="alert">{{ error() }}</div>
+}
+
+<section class="card">
+  @if (loading() && tasks().length === 0) {
+    <p class="empty">Loading…</p>
+  } @else if (tasks().length === 0) {
+    <p class="empty">No tasks match these filters.</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            @if (auth.isManager()) { <th>Assignee</th> }
+            <th>Due</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of tasks(); track task._id) {
+            <tr>
+              <td class="mono">{{ task.taskNumber }}</td>
+              <td>
+                <div class="task-title">{{ task.title }}</div>
+                <!-- @if (task.description) {
+                  <div class="task-desc">{{ task.description }}</div>
+                } -->
+              </td>
+              <td>
+                <select #sel class="status-select" (change)="changeStatus(task, sel.value)">
+                  @for (s of statuses(); track s) {
+                    <option [value]="s" [selected]="s === task.status">{{ s | label }}</option>
+                  }
+                </select>
+              </td>
+              <td><span [class]="'badge p-' + task.priority">{{ task.priority | label }}</span></td>
+              @if (auth.isManager()) { <td>{{ task.assignedTo.name }}</td> }
+              <td [class.overdue]="isOverdue(task)">
+                {{ task.dueDate ? (task.dueDate | date: 'mediumDate' : 'UTC') : '—' }}
+              </td>
+              <td class="actions">
+                @if (canEdit(task)) {
+                  <a class="btn btn-ghost btn-sm" [routerLink]="['/tasks', task._id, 'edit']">Edit</a>
+                  <button class="btn btn-danger btn-sm" (click)="deleteTask(task)">Delete</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (pagination(); as p) {
+      <div class="pager">
+        <span class="muted">{{ p.total }} task{{ p.total === 1 ? '' : 's' }} · page {{ p.page }} of {{ p.totalPages }}</span>
+        <div>
+          <button class="btn btn-ghost btn-sm" [disabled]="p.page <= 1" (click)="goToPage(p.page - 1)">← Prev</button>
+          <button class="btn btn-ghost btn-sm" [disabled]="p.page >= p.totalPages" (click)="goToPage(p.page + 1)">Next →</button>
+        </div>
+      </div>
+    }
+  }
+</section>
