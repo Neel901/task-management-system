@@ -9,7 +9,7 @@ const STATUSES = [
   "backlog",
   "rejected",
 ];
-const PRIORITIES = ["blocker", "critical", "major", "medium", "minor", "unassigned"];
+const PRIORITIES = ["critical", "major", "medium", "minor"];
 
 const taskSchema = new mongoose.Schema(
   {

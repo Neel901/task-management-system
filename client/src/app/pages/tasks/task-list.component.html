@@ -70,7 +70,7 @@
             <tr>
               <td class="mono">{{ task.taskNumber }}</td>
               <td>
-                <div class="task-title">{{ task.title }}</div>
+                <a class="task-title task-link" [routerLink]="['/tasks', task._id]">{{ task.title }}</a>
                 <!-- @if (task.description) {
                   <div class="task-desc">{{ task.description }}</div>
                 } -->

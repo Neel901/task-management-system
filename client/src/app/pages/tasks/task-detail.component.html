@@ -1,0 +1,86 @@
+<a class="back" routerLink="/tasks"> <- Back to tasks</a>
+
+@if (error()) {
+  <div class="alert">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <p class="empty">Loading task...</p>
+}
+
+@if (task(); as t) {
+  <div class="page-header">
+    <div>
+      <span class="mono">{{ t.taskNumber }}</span>
+      <h1>{{ t.title }}</h1>
+    </div>
+    @if (canEdit(t)) {
+      <div class="actions">
+        <a class="btn btn-ghost" [routerLink]="['/tasks', t._id, 'edit']">Edit</a>
+        <button class="btn btn-danger" (click)="deleteTask(t)">Delete</button>
+      </div>
+    }
+  </div>
+
+  <!-- Status & Priority row -->
+  <div class="detail-meta card">
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span [class]="'badge s-' + t.status">{{ t.status | label }}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Priority</span>
+      <span [class]="'badge p-' + t.priority">{{ t.priority | label }}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Due date</span>
+      <span [class.overdue]="isOverdue(t)">
+        {{ t.dueDate ? (t.dueDate | date: 'longDate' : 'UTC') : '-' }}
+      </span>
+    </div>
+    @if (t.completedAt) {
+      <div class="meta-item">
+        <span class="meta-label">Completed</span>
+        <span>{{ t.completedAt | date: 'longDate' : 'UTC' }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- People -->
+  <div class="detail-people card">
+    <div class="meta-item">
+      <span class="meta-label">Assigned to</span>
+      <span class="person">
+        <span class="avatar-sm">{{ t.assignedTo.name.charAt(0).toUpperCase() }}</span>
+        {{ t.assignedTo.name }}
+        <span class="muted">({{ t.assignedTo.employeeCode }})</span>
+      </span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Created by</span>
+      <span class="person">
+        <span class="avatar-sm">{{ t.createdBy.name.charAt(0).toUpperCase() }}</span>
+        {{ t.createdBy.name }}
+        <span class="muted">({{ t.createdBy.employeeCode }})</span>
+      </span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Created</span>
+      <span>{{ t.createdAt | date: 'medium' }}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Last updated</span>
+      <span>{{ t.updatedAt | date: 'medium' }}</span>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <section class="card">
+    <h2 style="margin-bottom: 12px;">Description</h2>
+    @if (t.description) {
+      <p class="task-description">{{ t.description }}</p>
+    } @else {
+      <p class="empty">No description provided.</p>
+    }
+  </section>
+}

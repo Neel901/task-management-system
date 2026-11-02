@@ -3,3 +3,5 @@ node_modules/
 dist/
 .angular/
 out-tsc/
+mongodb-win32-x86_64-windows-9.0.4/
+mongodata/

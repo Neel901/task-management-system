@@ -45,7 +45,7 @@
       </thead>
       <tbody>
         @for (task of recent(); track task._id) {
-          <tr>
+          <tr class="clickable-row" [routerLink]="['/tasks', task._id]">
             <td class="mono">{{ task.taskNumber }}</td>
             <td>{{ task.title }}</td>
             <td><span [class]="'badge s-' + task.status">{{ task.status | label }}</span></td>

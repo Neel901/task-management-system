@@ -133,7 +133,6 @@ textarea { resize: vertical; }
 .s-on-hold { background: #fff4db; color: #a86400; }
 .s-done { background: #e3f6ea; color: #1f7a45; }
 .s-rejected { background: #fdeeee; color: #a82b2b; }
-.p-blocker { background: #fbe0e0; color: #9b1c1c; }
 .p-critical { background: #ffe8d6; color: #b4500a; }
 .p-major { background: #fff4db; color: #8f5c00; }
 .p-medium { background: #e6f4ff; color: #0b6bb5; }
@@ -155,3 +154,27 @@ textarea { resize: vertical; }
   .grid-2 { grid-template-columns: 1fr; }
   .topbar { padding: 10px 16px; gap: 12px; }
 }
+
+/* ---------- Task detail ---------- */
+.detail-meta,
+.detail-people {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
+.person { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.avatar-sm {
+  width: 28px; height: 28px; border-radius: 50%; background: #e8ecff;
+  color: var(--primary); display: grid; place-items: center;
+  font-weight: 700; font-size: 0.82rem; flex-shrink: 0;
+}
+.task-description { line-height: 1.65; white-space: pre-wrap; margin: 0; }
+
+/* ---------- Clickable rows & task link ---------- */
+.clickable-row { cursor: pointer; }
+.clickable-row:hover td { background: #f0f3ff; }
+.task-link { font-weight: 500; color: var(--text); }
+.task-link:hover { color: var(--primary); text-decoration: underline; }
+

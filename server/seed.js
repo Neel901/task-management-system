@@ -28,7 +28,7 @@ const daysFromNow = (n) => new Date(Date.now() + n * 24 * 60 * 60 * 1000);
     { taskNumber: "TMS-0001", title: "Set up project repository", status: "done", priority: "major", assignedTo: asha._id, createdBy: manager._id, completedAt: new Date() },
     { taskNumber: "TMS-0002", title: "Design login page", status: "in-progress", priority: "critical", assignedTo: asha._id, createdBy: manager._id, dueDate: daysFromNow(2) },
     { taskNumber: "TMS-0003", title: "Write API docs", status: "next", priority: "medium", assignedTo: ravi._id, createdBy: manager._id, dueDate: daysFromNow(5) },
-    { taskNumber: "TMS-0004", title: "Fix date bug in reports", status: "review", priority: "blocker", assignedTo: ravi._id, createdBy: manager._id, dueDate: daysFromNow(-1) },
+    { taskNumber: "TMS-0004", title: "Fix date bug in reports", status: "review", priority: "minor", assignedTo: ravi._id, createdBy: manager._id, dueDate: daysFromNow(-1) },
     { taskNumber: "TMS-0005", title: "Learn Angular signals", status: "backlog", priority: "minor", assignedTo: ravi._id, createdBy: ravi._id },
   ]);
 
