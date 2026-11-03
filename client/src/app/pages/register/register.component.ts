@@ -17,12 +17,17 @@ export class RegisterComponent {
 
   loading = signal(false);
   error = signal('');
+  showPassword = signal(false);
 
   form = this.fb.nonNullable.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update((val) => !val);
+  }
 
   submit(): void {
     if (this.form.invalid) {

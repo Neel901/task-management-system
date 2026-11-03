@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-// Checks the "Authorization: Bearer <token>" header and puts { id, role } on req.user
 const protect = (req, res, next) => {
   const header = req.headers.authorization || "";
   if (!header.startsWith("Bearer ")) {
@@ -17,7 +16,6 @@ const protect = (req, res, next) => {
   }
 };
 
-// Usage: router.get("/x", protect, allowRoles("manager"), handler)
 const allowRoles =
   (...roles) =>
   (req, res, next) => {

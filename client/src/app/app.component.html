@@ -16,8 +16,12 @@
       <button class="btn btn-ghost" (click)="auth.logout()">Log out</button>
     </div>
   </header>
-}
 
-<main class="container">
-  <router-outlet />
-</main>
+  <main class="container">
+    <router-outlet />
+  </main>
+} @else {
+  <main class="auth-main-layout">
+    <router-outlet />
+  </main>
+}

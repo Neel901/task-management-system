@@ -17,11 +17,16 @@ export class LoginComponent {
 
   loading = signal(false);
   error = signal('');
+  showPassword = signal(false);
 
   form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update((val) => !val);
+  }
 
   /** Fills in one of the seeded demo accounts. */
   useDemo(email: string): void {
